@@ -152,11 +152,36 @@ func (app *application) createSnippets(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) signUpUserForm(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Displaying a sign up form....")
+	app.render(w, r, "signup.page.tmpl", &templateData{
+		Form: forms.New(nil),
+	})
 }
 
 func (app *application) signUpUser(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Signing up a user....")
+	// Parse the form data
+	err := r.ParseForm()
+	if err != nil {
+		app.clientError(w, http.StatusBadRequest)
+		return
+	}
+	
+	// Validate the form contents using helper methods from the forms package
+	form := forms.New(r.PostForm)
+	form.Required("name", "email", "password")
+	form.MaxLength("name", 255)
+	form.MaxLength("email", 255)
+	form.MatchesPattern("email", forms.EmailRX)
+	form.MinLength("password", 10)
+	
+	// Check if the form is valid
+	if !form.Valid() {
+		app.render(w, r, "signup.page.tmpl", &templateData{
+			Form: form,
+		})
+		return
+	}
+	// Otherwise send a placeholder response (for now!)
+	fmt.Fprintf(w, "Create a new user...")
 }
 
 func (app *application) loginUserForm(w http.ResponseWriter, r *http.Request) {
