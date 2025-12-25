@@ -21,6 +21,7 @@ type application struct {
 	session       *sessions.Session
 	snippets      *mysql.SnippetModel
 	templateCache map[string]*template.Template
+	users         *mysql.UserModel
 }
 
 func main() {
@@ -55,12 +56,14 @@ func main() {
 	session.Lifetime = 12 * time.Hour
 	session.Secure = true
 
+	// Initialize the mysql.UserModel instance and add it to the application struct.
 	app := &application{
 		errorLog:      errorLog,
 		infoLog:       infoLog,
 		session:       session,
 		snippets:      &mysql.SnippetModel{DB: db},
 		templateCache: templateCache,
+		users:         &mysql.UserModel{DB: db},
 	}
 
 	// Initialize a tls.Config struct to hold the non-default TLS settings we want
