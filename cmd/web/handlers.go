@@ -150,3 +150,23 @@ func (app *application) createSnippets(w http.ResponseWriter, r *http.Request) {
 	app.session.Put(r, "flash", "Snippet Successfully Created..!")
 	http.Redirect(w, r, fmt.Sprintf("/snippet/%d", id), http.StatusSeeOther)
 }
+
+func (app *application) signUpUserForm(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Displaying a sign up form....")
+}
+
+func (app *application) signUpUser(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Signing up a user....")
+}
+
+func (app *application) loginUserForm(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Displaying a login form....")
+}
+
+func (app *application) loginUser(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Login a User")
+}
+
+func (app *application) logoutUser(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Logout a User,,,")
+}
