@@ -32,6 +32,15 @@ func (app *application) notFound(w http.ResponseWriter) {
 	app.clientError(w, http.StatusNotFound)
 }
 
+// Return true if the user is authenticated, otherwise false.
+func (app *application) isAuthenticated(r *http.Request) bool {
+	isAuthenticated, ok := r.Context().Value(contextKeyIsAuthenticated).(bool)
+	if !ok {
+		return false
+	}
+	return isAuthenticated
+}
+
 // Create an addDefaultData helper. This takes a pointer to a templateData
 // struct, adds the current year to the CurrentYear field, and then returns the pointer.
 func (app *application) addDefaultData(td *templateData, r *http.Request) *templateData {
@@ -67,9 +76,4 @@ func (app *application) render(w http.ResponseWriter, r *http.Request, name stri
 	}
 	// Write the contents of the buffer to the http.ResponseWriter
 	buf.WriteTo(w)
-}
-
-// Return true if the user is authenticated, otherwise false.
-func (app *application) isAuthenticated(r *http.Request) bool {
-	return app.session.Exists(r, "authenticatedUserId")
 }

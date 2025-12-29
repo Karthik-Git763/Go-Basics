@@ -15,7 +15,8 @@ func (app *application) routes() http.Handler {
 	// Create a new middleware chain containing the middleware specific to
 	// our dynamic application routes.
 	// Use the noSurf middleware to protect against CSRF attacks.
-	dynamicMiddleware := alice.New(app.session.Enable, noSurf)
+	// Add the authenticate() middleware to the chain.
+	dynamicMiddleware := alice.New(app.session.Enable, noSurf, app.authenticate)
 
 	mux := pat.New()
 	// Update these routes to use the new dynamic middleware chain followed
